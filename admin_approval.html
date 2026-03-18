@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Line Stay - Admin Secure Panel</title>
+    <style>
+        body { margin: 0; font-family: 'Public Sans', sans-serif; background: #f4f5f7; color: #5e5873; }
+        .sidebar { width: 230px; height: 100vh; background: #2f3542; color: white; position: fixed; left: 0; top: 0; padding-top: 20px; }
+        .logo { text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; border-bottom: 1px solid #404b60; padding-bottom: 20px; }
+        .menu a { display: block; color: #ff7675; padding: 14px 20px; text-decoration: none; font-size: 14px; transition: 0.3s; font-weight: bold; }
+        .menu a:hover { background: #ea5455; color: white; }
+        .main { margin-left: 230px; padding: 30px; }
+        
+        .search-container { margin-bottom: 15px; }
+        .search-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .tab-btn { padding: 12px 20px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; color: #5e5873; }
+        .tab-btn.active { background: #7367f0; color: white; border-color: #7367f0; }
+        
+        .admin-panel { display: none; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); border-top: 4px solid #7367f0; }
+        .admin-panel.active { display: block; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #5e5873; text-transform: uppercase; font-size: 11px; }
+        
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; color: white; }
+        .btn-action { padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; color: white; transition: 0.2s; margin-right: 5px; }
+        .btn-delete { background: #ff4d4f !important; }
+        .btn-delete:hover { background: #ff1a1a !important; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">💰 LINE<span style="color:#7367f0">STAY</span></div>
+    <div class="menu"><a href="login.html">⚠️ Logout Admin</a></div>
+</div>
+
+<div class="main">
+    <div class="admin-tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'user-mgmt')">👥 Users</button>
+        <button class="tab-btn" onclick="switchTab(event, 'trans-approval')">💸 Withdrawals</button>
+        <button class="tab-btn" onclick="switchTab(event, 'user-income')">💰 User Income</button>
+    </div>
+
+    <div id="user-mgmt" class="admin-panel active">
+        <h2>User Database</h2>
+        <div class="search-container">
+            <input type="text" id="userSearch" class="search-input" placeholder="Search users..." onkeyup="loadUserData()">
+        </div>
+        <table>
+            <thead><tr><th>Username</th><th>Phone</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="userTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="trans-approval" class="admin-panel">
+        <h2>Transaction History</h2>
+        <table>
+            <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="withdrawalTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="user-income" class="admin-panel">
+        <h2>Member Balances</h2>
+        <table>
+            <thead><tr><th>Username</th><th>Affiliate</th><th>Available</th><th>Action</th></tr></thead>
+            <tbody id="incomeTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function switchTab(event, tabId) {
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+        
+        if(tabId === 'user-income') loadIncomeData();
+        if(tabId === 'trans-approval') loadWithdrawalData();
+        if(tabId === 'user-mgmt') loadUserData();
+    }
+
+    // --- USER MANAGEMENT ---
+    function loadUserData() {
+        const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+        const tableBody = document.getElementById('userTableBody');
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        tableBody.innerHTML = '';
+
+        users.filter(u => u.type !== 'admin').forEach(user => {
+            if (user.username.toLowerCase().includes(searchTerm)) {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.phone}</td>
+                        <td><span class="status-badge" style="background:${user.active ? '#28c76f':'#ea5455'}">${user.active ? 'Active' : 'Pending'}</span></td>
+                        <td>
+                            <button class="btn-action" style="background:#7367f0" onclick="toggleUser('${user.username}')">Status</button>
+                            <button class="btn-action btn-delete" onclick="deleteUser('${user.username}')">Delete Account</button>
+                        </td>
+                    </tr>`;
+            }
+        });
+    }
+
+    function deleteUser(username) {
+        if(confirm(`Are you sure you want to PERMANENTLY delete ${username}? All their data will be lost.`)) {
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            users = users.filter(u => u.username !== username);
+            localStorage.setItem("users", JSON.stringify(users));
+            
+            // Clean up related balance data
+            localStorage.removeItem(username + "_affiliateEarnings");
+            localStorage.removeItem(username + "_withdrawn");
+            
+            loadUserData();
+        }
+    }
+
+    function toggleUser(username) {
+        let users = JSON.parse(localStorage.getItem("users"));
+        let idx = users.findIndex(u => u.username === username);
+        users[idx].active = !users[idx].active;
+        localStorage.setItem("users", JSON.stringify(users));
+        loadUserData();
+    }
+
+
+   // --- WITHDRAWAL MANAGEMENT ---
+    function loadWithdrawalData() {
+        const tableBody = document.getElementById('withdrawalTableBody');
+        let logs = JSON.parse(localStorage.getItem("withdrawLogs")) || [];
+        tableBody.innerHTML = logs.length ? '' : '<tr><td colspan="5" style="text-align:center;">No requests found</td></tr>';
+
+        logs.forEach((log, index) => {
+            let statusStyle = "";
+            if (log.status === "Pending") statusStyle = "background:#fff3cd; color:#856404;";
+            else if (log.status === "Paid") statusStyle = "background:#dcfce7; color:#166534;";
+            else statusStyle = "background:#fee2e2; color:#991b1b;";
+
+            tableBody.innerHTML += `
+                <tr>
+                    <td><strong>${log.username}</strong></td>
+                    <td>RF ${parseInt(log.amount).toLocaleString()}</td>
+                    <td>${log.method}</td>
+                    <td><span class="status-badge" style="${statusStyle}">${log.status}</span></td>
+                    <td>
+                        <button class="btn-action" style="background:#1cc88a;" 
+                            onclick="processTransaction(${index}, 'Paid')" 
+                            ${log.status === 'Paid' ? 'disabled style="opacity:0.5"' : ''}>
+                            Approve
+                        </button>
+
+                        <button class="btn-action" style="background:#f39c12;" 
+                            onclick="processTransaction(${index}, 'Rejected')"
+                            ${log.status === 'Rejected' ? 'disabled style="opacity:0.5"' : ''}>
+                            Reject
+                        </button>
+
+                        <button class="btn-action btn-delete" onclick="deleteWithdrawal(${index})">
+                            Remove
+                        </button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    function processTransaction(logIndex, newStatus) {
+        let logs = JSON.parse(localStorage.getItem("withdrawLogs")) || [];
+        const request = logs[logIndex];
+        const userPrefix = request.username + "_";
+        const oldStatus = request.status;
+
+        // LOGIC: If moving to PAID, increase the 'withdrawn' tracker
+        if (newStatus === 'Paid' && oldStatus !== 'Paid') {
+            let currentWithdrawn = parseInt(localStorage.getItem(userPrefix + "withdrawn")) || 0;
+            localStorage.setItem(userPrefix + "withdrawn", currentWithdrawn + parseInt(request.amount));
+            alert(`${request.username}'s request approved.`);
+        } 
+        
+        // LOGIC: If moving FROM Paid back to Rejected, refund the 'withdrawn' tracker
+        else if (newStatus === 'Rejected' && oldStatus === 'Paid') {
+            let currentWithdrawn = parseInt(localStorage.getItem(userPrefix + "withdrawn")) || 0;
+            localStorage.setItem(userPrefix + "withdrawn", Math.max(0, currentWithdrawn - parseInt(request.amount)));
+            alert(`Payment reversed. Money returned to ${request.username}'s balance.`);
+        }
+        
+        else if (newStatus === 'Rejected') {
+            alert("Transaction Rejected.");
+        }
+
+        logs[logIndex].status = newStatus;
+        localStorage.setItem("withdrawLogs", JSON.stringify(logs));
+        loadWithdrawalData();
+        
+        // Refresh income tab if it's open
+        if(document.getElementById('user-income').classList.contains('active')) loadIncomeData();
+    }
+
+    function deleteWithdrawal(index) {
+        if(confirm("Permanently remove this record from history? (This does not affect user balances)")) {
+            let logs = JSON.parse(localStorage.getItem("withdrawLogs")) || [];
+            logs.splice(index, 1);
+            localStorage.setItem("withdrawLogs", JSON.stringify(logs));
+            loadWithdrawalData();
+        }
+    }
+    function loadIncomeData() {
+        const tableBody = document.getElementById('incomeTableBody');
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        tableBody.innerHTML = '';
+        
+        users.filter(u => u.type !== 'admin').forEach(user => {
+            const prefix = user.username + "_";
+            const affEarned = parseInt(localStorage.getItem(prefix + "affiliateEarnings")) || 0;
+            const withdrawn = parseInt(localStorage.getItem(prefix + "withdrawn")) || 0;
+            
+            tableBody.innerHTML += `
+                <tr>
+                    <td><strong>${user.username}</strong></td>
+                    <td style="color:#7367f0;">RF ${affEarned.toLocaleString()}</td>
+                    <td style="color:#28c76f;">RF ${(affEarned - withdrawn).toLocaleString()}</td>
+                    <td>
+                        <button class="btn-action btn-delete" onclick="resetIncome('${user.username}')">Reset Statement</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    function resetIncome(username) {
+        if(confirm(`Reset all earnings and withdrawal history for ${username}? User balance will become RF 0.`)) {
+            localStorage.setItem(username + "_affiliateEarnings", 0);
+            localStorage.setItem(username + "_withdrawn", 0);
+            loadIncomeData();
+        }
+    }
+
+    window.onload = loadUserData;
+</script>
+</body>
+</html>

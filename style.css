@@ -1,0 +1,207 @@
+/* Premium Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --sidebar-width: 260px;
+    --sidebar-bg: #1e222d;
+    --active-blue: #3b82f6;
+    --text-muted: #94a3b8;
+    --main-bg: #f8fafc;
+    --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--main-bg);
+    color: #1e293b;
+    display: flex;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.logo-section {
+    padding: 30px 24px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    background: #fbbf24;
+    padding: 6px;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+.menu-list {
+    flex: 1;
+    padding: 20px 0;
+    overflow-y: auto;
+}
+
+.menu-list a {
+    display: flex;
+    align-items: center;
+    padding: 14px 24px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.menu-list a:hover {
+    background: rgba(255,255,255,0.03);
+    color: white;
+}
+
+.menu-list a.active {
+    background: rgba(59, 130, 246, 0.1);
+    color: white;
+    border-left-color: var(--active-blue);
+}
+
+.menu-list a i {
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+/* Main Area Adjustment */
+.main-wrapper {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 40px;
+    min-height: 100vh;
+}
+
+/* Dashboard Card Styling */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #e2e8f0;
+}
+
+.balance-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.balance-amount {
+    color: #10b981;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+
+
+
+
+/* Premium Sidebar-Only CSS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    --sidebar-width: 250px;
+    --sidebar-bg: #1e222d;
+    --active-blue: #3b82f6;
+}
+
+/* Sidebar structure - Fixed position ensures it doesn't move main content */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: white;
+    position: fixed; /* Fixes sidebar to the left */
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 9999;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.2);
+}
+
+.logo-section {
+    padding: 25px 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.menu-list {
+    flex: 1;
+    padding-top: 15px;
+    overflow-y: auto;
+}
+
+.menu-list a {
+    display: block;
+    padding: 12px 20px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.menu-list a:hover {
+    background: rgba(255,255,255,0.05);
+    color: #ffffff;
+}
+
+.menu-list a.active {
+    background: rgba(59, 130, 246, 0.1);
+    color: #ffffff;
+    border-left-color: var(--active-blue);
+}
+
+/* The Red Logout Button as requested */
+.logout-btn {
+    margin: 15px;
+    padding: 12px;
+    background: #ef4444 !important;
+    color: white !important;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #dc2626 !important;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* IMPORTANT: Ensure your main content has enough space to the left */
+/* If your content is hidden behind the sidebar, add this to your main container: */
+#main-content-area {
+    margin-left: var(--sidebar-width);
+    padding: 20px;
+}

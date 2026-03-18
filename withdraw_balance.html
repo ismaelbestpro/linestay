@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Stay - Withdraw Balance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-bg: #1e222d;
+            --sidebar-width: 280px;
+            --active-item-bg: rgba(255, 255, 255, 0.08);
+            --text-gray: #94a3b8;
+            --logout-red: #f84f4f;
+            --accent-purple: #7367f0;
+            --main-bg: #f4f5f7;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--main-bg);
+            display: flex;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            position: fixed;
+            left: 0; top: 0;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            padding: 40px 24px;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-list { flex: 1; overflow-y: auto; }
+
+        .menu-list a {
+            display: block;
+            padding: 16px 28px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-list a:hover { color: white; background-color: var(--active-item-bg); }
+
+        .menu-list a.active {
+            color: white;
+            background-color: var(--active-item-bg);
+            border-left-color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .logout-container { padding: 20px; }
+
+        .logout-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--logout-red);
+            color: white;
+            text-align: center;
+            padding: 14px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .balance-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #1cc88a 0%, #13a369 100%);
+            color: white;
+        }
+
+        .balance-amount { font-size: 32px; font-weight: 800; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #475569; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; box-sizing: border-box; font-family: inherit;
+        }
+
+        .btn-submit {
+            width: 100%; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .btn-submit:hover { background: #2563eb; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; padding: 12px; border-bottom: 2px solid #f1f5f9; color: #64748b; font-size: 13px; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; color: white; background: #94a3b8; }
+        .status-paid { background: #1cc88a; }
+        .status-pending { background: #f59e0b; }
+        .status-rejected { background: #f84f4f; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-section">💰 LINE STAY</div>
+    <nav class="menu-list">
+        <a href="menu.html">Dashboard</a>
+        <a href="withdraw_bonus.html">Withdraw Bonus</a>
+        <a href="withdraw_balance.html" class="active">Withdraw Balance</a>
+        <a href="withdraw_task.html">Withdraw Task Earn</a>
+        <a href="team_task.html">Team Task</a>
+        <a href="video_task.html">Video Task</a>
+        <a href="spin_task.html">Spin Task</a>
+        <a href="watch_task.html">Watch Task</a>
+        <a href="profile.html">User Profile</a>
+    </nav>
+    <div class="logout-container">
+        <button onclick="logout()" class="logout-btn">Logout Account</button>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <h2 id="welcomeUser">Affiliate Withdrawal</h2>
+    
+    <div class="card balance-card">
+        <div>
+            <span style="font-weight: 600; opacity: 0.9;">Current Balance</span>
+            <p style="margin:0; font-size: 12px; opacity: 0.8;">(Affiliate Earned - Total Withdrawn)</p>
+        </div>
+        <span class="balance-amount" id="displayBalance">RF 0</span>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0; font-size: 20px; color: #1e293b;">Request Withdrawal</h3>
+        <form id="withdrawForm">
+            <div class="form-group">
+                <label>Withdraw Amount (RF)</label>
+                <input type="number" id="withdrawAmount" placeholder="Min RF 3,000" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="paymentMethod">
+                    <option value="MTN MoMo">MTN MoMo</option>
+                    <option value="Airtel Money">Airtel Money</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="phone" placeholder="Enter MoMo/Airtel number" required>
+            </div>
+            <button type="button" class="btn-submit" onclick="processWithdrawal()">Submit Request</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0; font-size: 18px;">Withdrawal History</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (!currentUser) { window.location.href = "login.html"; }
+    const prefix = currentUser.username + "_";
+
+    window.onload = function() {
+        updateBalanceDisplay();
+        renderHistory();
+    };
+
+    function updateBalanceDisplay() {
+        // SYNCED LOGIC
+        const affEarned = parseInt(localStorage.getItem(prefix + "affiliateEarnings")) || 0;
+        const withdrawnTotal = parseInt(localStorage.getItem(prefix + "withdrawn")) || 0;
+        
+        let currentBalance = affEarned - withdrawnTotal;
+        if (currentBalance < 0) currentBalance = 0;
+        
+        document.getElementById("displayBalance").innerText = "RF " + currentBalance.toLocaleString();
+        return currentBalance;
+    }
+
+    function processWithdrawal() {
+        const amount = parseInt(document.getElementById("withdrawAmount").value);
+        const available = updateBalanceDisplay();
+        
+        // Check for existing pending request
+        const adminLogs = JSON.parse(localStorage.getItem("withdrawLogs")) || [];
+        const hasPending = adminLogs.some(log => log.username === currentUser.username && log.status === "Pending");
+
+        if (amount < 3000) { alert("Minimum RF 3,000"); return; }
+        if (amount > available) { alert("Insufficient Balance!"); return; }
+        if (hasPending) { alert("You already have a request pending!"); return; }
+
+        const newRequest = {
+            id: Date.now(),
+            username: currentUser.username,
+            amount: amount,
+            method: document.getElementById("paymentMethod").value,
+            phone: document.getElementById("phone").value.trim(),
+            status: "Pending",
+            date: new Date().toLocaleDateString()
+        };
+
+        adminLogs.push(newRequest);
+        localStorage.setItem("withdrawLogs", JSON.stringify(adminLogs));
+
+        let userHistory = JSON.parse(localStorage.getItem(prefix + "withdrawHistory")) || [];
+        userHistory.unshift(newRequest);
+        localStorage.setItem(prefix + "withdrawHistory", JSON.stringify(userHistory));
+
+        alert("Withdrawal Requested!");
+        location.reload(); 
+    }
+
+    function renderHistory() {
+        const adminLogs = JSON.parse(localStorage.getItem("withdrawLogs")) || [];
+        let userHistory = JSON.parse(localStorage.getItem(prefix + "withdrawHistory")) || [];
+
+        const tbody = document.getElementById("historyBody");
+        tbody.innerHTML = "";
+
+        userHistory.forEach(item => {
+            // Find current status from admin logs
+            const currentStatus = adminLogs.find(l => l.id === item.id)?.status || item.status;
+            let statusClass = currentStatus === "Paid" ? "status-paid" : (currentStatus === "Rejected" ? "status-rejected" : "status-pending");
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.date}</td>
+                    <td>RF ${item.amount.toLocaleString()}</td>
+                    <td>${item.method}</td>
+                    <td><span class="status-badge ${statusClass}">${currentStatus.toUpperCase()}</span></td>
+                </tr>
+            `;
+        });
+    }
+       function logout() {
+        localStorage.removeItem("currentUser");
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>

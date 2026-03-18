@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Stay - Video Task</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #1e222d;
+            --sidebar-width: 280px;
+            --active-item-bg: rgba(255, 255, 255, 0.08);
+            --text-gray: #94a3b8;
+            --logout-red: #f84f4f;
+            --accent-purple: #7367f0;
+            --accent-yellow: #f6c23e;
+            --main-bg: #f4f5f7;
+            --primary-blue: #3b82f6;
+            --success-green: #28c76f;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--main-bg); display: flex; overflow-x: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { width: var(--sidebar-width); height: 100vh; background-color: var(--sidebar-bg); position: fixed; left: 0; top: 0; display: flex; flex-direction: column; color: white; z-index: 1000; }
+        .logo-section { padding: 40px 24px; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; }
+        .menu-list { flex: 1; overflow-y: auto; }
+        .menu-item-container { display: flex; justify-content: space-between; align-items: center; padding: 16px 28px; color: var(--text-gray); text-decoration: none; font-size: 15px; transition: 0.2s; border-left: 4px solid transparent; }
+        .menu-item-container:hover, .menu-item-container.active { color: white; background-color: var(--active-item-bg); }
+        .menu-item-container.active { border-left-color: var(--accent-purple); font-weight: 600; }
+
+        .sidebar-bal { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        .bal-purple { background: rgba(115, 103, 240, 0.2); color: #a29bfe; }
+        .bal-yellow { background: rgba(246, 194, 62, 0.2); color: var(--accent-yellow); }
+
+        .logout-container { padding: 20px; }
+        .logout-btn { display: block; width: 100%; background-color: var(--logout-red); color: white; text-align: center; padding: 14px 0; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; }
+
+        /* MAIN CONTENT */
+        .main-wrapper { margin-left: var(--sidebar-width); flex: 1; padding: 40px; min-height: 100vh; }
+        .total-earning-card { background: linear-gradient(135deg, #f6c23e, #f39c12); padding: 30px; border-radius: 16px; color: white; box-shadow: 0 10px 20px rgba(246, 194, 62, 0.2); margin-bottom: 30px; }
+        .total-earning-amount { font-size: 36px; font-weight: 800; margin-top: 5px; }
+
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+        .video-card { background: white; padding: 15px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: relative; }
+        .video-player-container { width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 16/9; margin-bottom: 15px; }
+        video { width: 100%; height: 100%; }
+
+        .btn-claim { width: 100%; padding: 14px; background: var(--primary-blue); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 15px; }
+        .btn-claim:disabled { background: #cbd5e1; cursor: not-allowed; }
+        .timer-active { background: #ff9f43 !important; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-section">💰 LINE STAY</div>
+    <nav class="menu-list">
+        <a href="menu.html" class="menu-item-container"><span>Dashboard</span></a>
+        <div class="menu-item-container">
+            <span>Total Earnings</span>
+            <span class="sidebar-bal bal-yellow" id="sideTotalEarn">RF 0</span>
+        </div>
+        <a href="withdraw_task.html" class="menu-item-container">
+            <span>Withdraw Task Earn</span>
+            <span class="sidebar-bal bal-purple" id="sideTaskBal">RF 0</span>
+        </a>
+        <a href="withdraw_balance.html" class="menu-item-container">
+            <span>Withdraw Balance</span>
+            <span class="sidebar-bal bal-purple" id="sideMainBal">RF 0</span>
+        </a>
+        <a href="team_task.html" class="menu-item-container"><span>Team Task</span></a>
+        <a href="video_task.html" class="menu-item-container active"><span>Video Task</span></a>
+        <a href="spin_task.html" class="menu-item-container"><span>Spin Task</span></a>
+        <a href="watch_task.html" class="menu-item-container"><span>Watch Task</span></a>
+        <a href="profile.html" class="menu-item-container"><span>User Profile</span></a>
+    </nav>
+    <div class="logout-container">
+        <button onclick="logout()" class="logout-btn">Logout Account</button>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <div class="total-earning-card">
+        <h2>Total Task Earnings</h2>
+        <div class="total-earning-amount" id="taskEarnings">RF 0</div>
+    </div>
+
+    <h3 style="margin-bottom: 25px; color: #1e293b;">Watch Videos to Earn (30s Required)</h3>
+
+    <div class="video-grid">
+        <div class="video-card">
+            <div class="video-player-container">
+                <video id="vid1_player" onplay="startVideoTimer('vid1')">
+                    <source src="master.mp4" type="video/mp4">
+                </video>
+            </div>
+            <button id="vid1_btn" class="btn-claim" disabled onclick="claimVideoReward('vid1')">Watch to Earn</button>
+        </div>
+
+        <div class="video-card">
+            <div class="video-player-container">
+                <video id="vid2_player" onplay="startVideoTimer('vid2')">
+                    <source src="sese.mp4" type="video/mp4">
+                </video>
+            </div>
+            <button id="vid2_btn" class="btn-claim" disabled onclick="claimVideoReward('vid2')">Watch to Earn</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (!user) { window.location.href = "login.html"; }
+    const prefix = user.username + "_";
+    const rewardAmountRF = 3600;
+    const MAX_DAILY = 5;
+    let activeTimers = {};
+
+    window.onload = function() {
+        checkDailyReset();
+        updateUI();
+        renderButtonStates();
+    };
+
+    function updateUI() {
+        const taskEarned = parseInt(localStorage.getItem(prefix + "taskEarnings")) || 0;
+        const affEarned = parseInt(localStorage.getItem(prefix + "affiliateEarnings")) || 0;
+        const withdrawn = parseInt(localStorage.getItem(prefix + "withdrawn")) || 0;
+        
+        const totalGross = taskEarned + affEarned;
+        let currentRemaining = affEarned - withdrawn;
+        if (currentRemaining < 0) currentRemaining = 0;
+
+        document.getElementById("taskEarnings").innerText = "RF " + taskEarned.toLocaleString();
+        document.getElementById("sideTotalEarn").innerText = "RF " + totalGross.toLocaleString();
+        document.getElementById("sideTaskBal").innerText = "RF " + taskEarned.toLocaleString();
+        document.getElementById("sideMainBal").innerText = "RF " + currentRemaining.toLocaleString();
+    }
+
+    function renderButtonStates() {
+        const dailyCount = parseInt(localStorage.getItem(prefix + "video_daily_count")) || 0;
+        const claimedToday = JSON.parse(localStorage.getItem(prefix + "claimed_videos_today")) || [];
+        
+        ['vid1', 'vid2'].forEach(id => {
+            const btn = document.getElementById(id + "_btn");
+            if (dailyCount >= MAX_DAILY) {
+                btn.innerText = "Daily Limit Reached";
+                btn.disabled = true;
+            } else if (claimedToday.includes(id)) {
+                btn.innerText = "Claimed!";
+                btn.style.background = "#28c76f";
+                btn.disabled = true;
+            }
+        });
+    }
+
+    function startVideoTimer(id) {
+        const btn = document.getElementById(id + "_btn");
+        const claimedToday = JSON.parse(localStorage.getItem(prefix + "claimed_videos_today")) || [];
+        
+        if (btn.disabled && !activeTimers[id] && !claimedToday.includes(id)) {
+            let timeLeft = 30;
+            btn.classList.add('timer-active');
+            
+            activeTimers[id] = setInterval(() => {
+                timeLeft--;
+                btn.innerText = `Watch ${timeLeft}s to Claim`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(activeTimers[id]);
+                    btn.innerText = "Claim RF 3,600";
+                    btn.classList.remove('timer-active');
+                    btn.disabled = false;
+                    delete activeTimers[id];
+                }
+            }, 1000);
+        }
+    }
+
+    function claimVideoReward(id) {
+        let dailyCount = parseInt(localStorage.getItem(prefix + "video_daily_count")) || 0;
+        let claimedToday = JSON.parse(localStorage.getItem(prefix + "claimed_videos_today")) || [];
+
+        // Update Data
+        let currentTaskTotal = parseInt(localStorage.getItem(prefix + "taskEarnings")) || 0;
+        localStorage.setItem(prefix + "taskEarnings", currentTaskTotal + rewardAmountRF);
+        
+        dailyCount++;
+        claimedToday.push(id);
+        localStorage.setItem(prefix + "video_daily_count", dailyCount);
+        localStorage.setItem(prefix + "claimed_videos_today", JSON.stringify(claimedToday));
+
+        alert("RF 3,600 Added to Task Balance!");
+        location.reload();
+    }
+
+    function checkDailyReset() {
+        const today = new Date().toLocaleDateString();
+        if (localStorage.getItem(prefix + "video_last_date") !== today) {
+            localStorage.setItem(prefix + "video_daily_count", 0);
+            localStorage.setItem(prefix + "video_last_date", today);
+            localStorage.setItem(prefix + "claimed_videos_today", "[]");
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem("currentUser");
+        window.location.href = "login.html";
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Stay - Spin Task</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-bg: #1e222d;
+            --sidebar-width: 280px;
+            --active-item-bg: rgba(255, 255, 255, 0.08);
+            --text-gray: #94a3b8;
+            --logout-red: #f84f4f;
+            --accent-purple: #7367f0;
+            --accent-yellow: #f6c23e;
+            --main-bg: #f4f5f7;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--main-bg); display: flex; }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width); height: 100vh; background-color: var(--sidebar-bg);
+            position: fixed; display: flex; flex-direction: column; color: white; z-index: 1000;
+        }
+        .logo-section { padding: 40px 24px; font-size: 24px; font-weight: 700; }
+        .menu-list { flex: 1; overflow-y: auto; }
+
+        .menu-item-container {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 28px; color: var(--text-gray); text-decoration: none;
+            font-size: 15px; transition: 0.2s; border-left: 4px solid transparent;
+        }
+        .menu-item-container:hover, .menu-item-container.active { color: white; background-color: var(--active-item-bg); }
+        .menu-item-container.active { border-left-color: var(--accent-purple); font-weight: 600; }
+
+        /* SIDEBAR PILLS */
+        .sidebar-bal { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        .bal-purple { background: rgba(115, 103, 240, 0.2); color: #a29bfe; }
+        .bal-yellow { background: rgba(246, 194, 62, 0.2); color: var(--accent-yellow); }
+
+        .logout-container { padding: 20px; }
+        .logout-btn { display: block; width: 100%; background-color: var(--logout-red); color: white; text-align: center; padding: 14px 0; border-radius: 12px; text-decoration: none; font-weight: 700; }
+
+        /* MAIN CONTENT */
+        .main-wrapper { margin-left: var(--sidebar-width); flex: 1; padding: 40px; min-height: 100vh; }
+        
+        .total-earning-card { 
+            background: #f6c23e; /* Matches the Yellow Total Earnings Card */
+            padding: 30px; 
+            border-radius: 16px; 
+            color: white;
+            box-shadow: 0 10px 20px rgba(246, 194, 62, 0.2); 
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        .total-earning-card h2 { margin: 0; font-size: 14px; text-transform: uppercase; opacity: 0.9; }
+        .total-earning-amount { font-size: 36px; font-weight: 800; margin-top: 5px; }
+
+        .game-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.05); text-align: center; max-width: 500px; margin: 0 auto; }
+        
+        /* Spin Wheel Visual */
+        .wheel-container { position: relative; width: 280px; height: 280px; margin: 20px auto; }
+        .wheel-box { 
+            width: 100%; height: 100%; border: 10px solid #333; border-radius: 50%; 
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); 
+            background: conic-gradient(#7367f0 0deg 60deg, #ff9f43 60deg 120deg, #1cc88a 120deg 180deg, #e74a3b 180deg 240deg, #36b9cc 240deg 300deg, #f6c23e 300deg 360deg); 
+        }
+        .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #333; z-index: 10; }
+
+        .btn-spin { width: 100%; padding: 16px; background: #7367f0; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 20px; }
+        .btn-spin:hover { background: #5e50ee; transform: translateY(-2px); }
+        .btn-spin:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-section">💰 LINE STAY</div>
+    <nav class="menu-list">
+        <a href="menu.html" class="menu-item-container"><span>Dash Board</span></a>
+        <div class="menu-item-container">
+            <span>Total Earnings</span>
+            <span class="sidebar-bal bal-yellow" id="sideTotalEarn">RF 0</span>
+        </div>
+        <a href="withdraw_task.html" class="menu-item-container">
+            <span>Withdraw Task Earn</span>
+            <span class="sidebar-bal bal-purple" id="sideTaskBal">RF 0</span>
+        </a>
+        <a href="withdraw_balance.html" class="menu-item-container">
+            <span>Withdraw Balance</span>
+            <span class="sidebar-bal bal-purple" id="sideMainBal">RF 0</span>
+        </a>
+        <a href="team_task.html" class="menu-item-container"><span>Team Task</span></a>
+        <a href="video_task.html" class="menu-item-container"><span>Video Task</span></a>
+        <a href="spin_task.html" class="menu-item-container active"><span>Spin Task</span></a>
+         <a href="watch_task.html" class="menu-item-container active"><span>Watch Task</span></a>
+        <a href="profile.html" class="menu-item-container"><span>User Profile</span></a>
+    </nav>
+    <div class="logout-container">
+        <a href="logout.html" class="logout-btn">Logout Account</a>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <div class="total-earning-card">
+        <h2>Total Earning Balance</h2>
+        <div class="total-earning-amount" id="totalEarnDisplay">RF 0</div>
+    </div>
+
+    <div class="game-card">
+        <h3 style="color: #1e293b; margin-bottom: 5px;">Lucky Spin</h3>
+        <p style="color: #64748b; font-size: 14px;">Win RF 100 - RF 500 per spin!</p>
+        
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <div class="wheel-box" id="wheel"></div>
+        </div>
+
+        <button class="btn-spin" id="spinBtn" onclick="spinWheel()">SPIN & EARN</button>
+        <p id="statusMsg" style="margin-top: 15px; font-weight: 600; color: #7367f0;"></p>
+    </div>
+</div>
+
+<script>
+    // 1. Setup User and Storage Prefix
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (!user) { window.location.href = "login.html"; }
+    const prefix = user.username + "_";
+
+    window.onload = function() {
+        updateUI();
+    };
+
+    function updateUI() {
+        // Fetch values using the consistent prefix
+        const taskEarned = parseInt(localStorage.getItem(prefix + "taskEarnings")) || 0;
+        const affEarned = parseInt(localStorage.getItem(prefix + "affiliateEarnings")) || 0;
+        const withdrawn = parseInt(localStorage.getItem(prefix + "withdrawn")) || 0;
+        
+        // Logic: Total Gross = Tasks + Referrals
+        const totalGross = taskEarned + affEarned;
+        const availableBal = affEarned - withdrawn;
+
+        // Update the Main Yellow Card (Fixed ID here)
+        const mainDisplay = document.getElementById("totalEarnDisplay");
+        if (mainDisplay) {
+            mainDisplay.innerText = "RF " + totalGross.toLocaleString();
+        }
+
+        // Update Sidebar Values
+        document.getElementById("sideTotalEarn").innerText = "RF " + totalGross.toLocaleString();
+        document.getElementById("sideTaskBal").innerText = "RF " + taskEarned.toLocaleString();
+        document.getElementById("sideMainBal").innerText = "RF " + availableBal.toLocaleString();
+    }
+
+    function spinWheel() {
+        const btn = document.getElementById("spinBtn");
+        const status = document.getElementById("statusMsg");
+        const wheel = document.getElementById("wheel");
+        
+        // Reset wheel rotation for a fresh spin
+        wheel.style.transition = "none";
+        wheel.style.transform = "rotate(0deg)";
+        
+        // Small delay to allow the "reset" to trigger before the actual spin
+        setTimeout(() => {
+            btn.disabled = true;
+            status.innerText = "Spinning... Good Luck!";
+            status.style.color = "#7367f0";
+
+            // Determine win and rotation
+            const winAmount = Math.floor(Math.random() * (500 - 100 + 1)) + 100;
+            const randomDeg = Math.floor(Math.random() * 360);
+            const totalRotation = 3600 + randomDeg; // 10 full spins + offset
+            
+            wheel.style.transition = "transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)";
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+
+            // Wait 4 seconds for animation
+          setTimeout(() => {
+    // 1. Get the current task earnings from storage
+    let currentTask = parseInt(localStorage.getItem(prefix + "taskEarnings")) || 0;
+    
+    // 2. Add the new win
+    const newTotal = currentTask + winAmount;
+    
+    // 3. SAVE IT: This is the data the Dashboard will read
+    localStorage.setItem(prefix + "taskEarnings", newTotal);
+    
+    // 4. Update the local UI on the spin page (optional but good for consistency)
+    updateUI(); 
+    
+    // 5. Show the user what they won
+    status.innerHTML = `WINNER! <br> <span style="font-size: 20px;">+ RF ${winAmount}</span>`;
+    status.style.color = "#1cc88a";
+    btn.disabled = false;
+}, 4000);
+        }, 50);
+    }
+</script>
+
+</body>
+</html>

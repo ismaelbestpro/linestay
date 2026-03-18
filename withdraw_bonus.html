@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Stay - Welcome Bonus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- DIGITAL SIDEBAR CSS (FROM SCREENSHOTS) --- */
+        :root {
+            --sidebar-bg: #1e222d;
+            --sidebar-width: 280px;
+            --active-item-bg: rgba(255, 255, 255, 0.08);
+            --text-gray: #94a3b8;
+            --logout-red: #f84f4f;
+            --accent-purple: #7367f0;
+            --main-bg: #f4f5f7;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--main-bg);
+            display: flex;
+        }
+
+        /* SIDEBAR STYLING */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            position: fixed;
+            left: 0; top: 0;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            padding: 40px 24px;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .menu-list a {
+            display: block;
+            padding: 16px 28px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-list a:hover {
+            color: white;
+            background-color: var(--active-item-bg);
+        }
+
+        .menu-list a.active {
+            color: white;
+            background-color: var(--active-item-bg);
+            border-left-color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        /* LOGOUT BUTTON PER SCREENSHOT */
+        .logout-container {
+            padding: 20px;
+        }
+
+        .logout-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--logout-red);
+            color: white;
+            text-align: center;
+            padding: 14px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #e04343;
+            box-shadow: 0 4px 12px rgba(248, 79, 79, 0.3);
+        }
+
+        /* --- CONTENT AREA --- */
+        .main-wrapper { 
+            margin-left: var(--sidebar-width); 
+            flex: 1; 
+            padding: 40px; 
+        }
+
+        .card { 
+            background: white; 
+            border-radius: 16px; 
+            padding: 24px; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 25px; 
+        }
+        
+        .balance-card {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+        }
+
+        .balance-amount { color: #b45309; font-size: 32px; font-weight: 800; }
+
+        .info-bar {
+            background: #fffbeb; 
+            border: 1px solid #fef08a; 
+            padding: 15px;
+            border-radius: 12px; 
+            color: #854d0e; 
+            font-size: 14px; 
+            font-weight: 600; 
+            margin-bottom: 25px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select {
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 8px; 
+            background: #f8fafc; 
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-submit {
+            width: 100%; 
+            padding: 14px; 
+            background: #f59e0b; 
+            color: white; 
+            border: none;
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
+        .btn-submit:hover:not(:disabled) { background: #d97706; }
+
+        .warning-text { color: #ef4444; font-weight: 700; font-size: 13px; margin-bottom: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-section">💰 LINE STAY</div>
+    <nav class="menu-list">
+        <a href="menu.html">Dash Board</a>
+        <a href="withdraw_bonus.html" class="active">Withdraw Bonus</a>
+        <a href="withdraw_balance.html">Withdraw Balance</a>
+        <a href="withdraw_task.html">Withdraw Task Earn</a>
+        <a href="team_task.html">Team Task</a>
+        <a href="video_task.html">Video Task</a>
+        <a href="spin_task.html">Spin Task</a>
+        <a href="watch_task.html">Watch Task</a>
+        <a href="profile.html">User Profile</a>
+    </nav>
+    <div class="logout-container">
+        <a href="logout.html" class="logout-btn">Logout Account</a>
+    </div>
+</div>
+
+<div class="main-wrapper">
+        <h2 id="welcomeUser">Your Welcome Bonus!</h2>
+    <div class="card balance-card">
+        <div><span style="font-weight: 600; color: #64748b;">Welcome Bonus Balance</span></div>
+        <span class="balance-amount" id="displayBonus">RF 0</span>
+    </div>
+
+    <div class="info-bar">
+        ✨ Rate: $12 = 15,000 RF | Withdrawal Goal: Reach 200,000 RF of Total Balance to Unlock!
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0; color: #1e293b;">Withdraw Welcome Bonus</h3>
+        <form id="bonusForm">
+            <div class="form-group">
+                <label>Amount (USD)</label>
+                <input type="number" id="bonusAmount" placeholder="Enter USD amount" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="paymentMethod">
+                    <option value="MTN MoMo">MTN MoMo</option>
+                    <option value="Airtel Money">Airtel Money</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="phone" placeholder="Enter MoMo/Airtel number" required>
+            </div>
+
+            <div id="withdrawWarning" class="warning-text">
+                ⚠️ You must reach 200,000 RF of total Balance to withdraw the bonus!
+            </div>
+            
+            <button type="button" id="submitBtn" class="btn-submit" onclick="handleWithdrawal()">Submit Request</button>
+        </form>
+    </div>
+</div>
+<script>
+    // 1. Initialize User Context
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (!user) { window.location.href = "login.html"; }
+    const prefix = user.username + "_";
+
+    // 2. Fetch Data using the established Prefix
+    // Welcome Bonus is usually 15,000 RF upon registration
+    let welcomeBonus = parseFloat(localStorage.getItem(prefix + "welcomeBonus")) || 15000; 
+    
+    // Available Balance logic: Affiliate Earnings - Total Withdrawn
+    let affEarned = parseInt(localStorage.getItem(prefix + "affiliateEarnings")) || 0;
+    let withdrawn = parseInt(localStorage.getItem(prefix + "withdrawn")) || 0;
+    let availableBalance = affEarned - withdrawn;
+
+    // 3. Update UI Display
+    document.getElementById("displayBonus").innerText = "RF " + welcomeBonus.toLocaleString();
+
+    const submitBtn = document.getElementById("submitBtn");
+    const warning = document.getElementById("withdrawWarning");
+
+    // 4. LOCK CHECK: Only allow if Available Balance is 200,000 RF or more
+    if (availableBalance < 200000) {
+        submitBtn.disabled = true;
+        submitBtn.style.background = "#cbd5e1"; // Grey out button
+        warning.style.display = "block";
+        warning.innerHTML = `⚠️ Your Available Balance is <b>RF ${availableBalance.toLocaleString()}</b>. You need <b>RF 200,000</b> to unlock this withdrawal!`;
+    }
+
+    function handleWithdrawal() {
+        const amountUSD = parseFloat(document.getElementById("bonusAmount").value);
+        const phone = document.getElementById("phone").value;
+        const method = document.getElementById("paymentMethod").value;
+
+        if (!amountUSD || !phone) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Calculation: $12 = 15,000 RF (Rate: 1250 RF per $1)
+        const amountRF = amountUSD * 1250;
+        
+        if (amountRF > welcomeBonus) {
+            alert("Insufficient Welcome Bonus balance. You only have RF " + welcomeBonus.toLocaleString());
+            return;
+        }
+
+        // 5. Create Request for Admin Approval
+        const request = {
+            username: user.username,
+            date: new Date().toLocaleString(),
+            phone: phone,
+            method: method,
+            amountUSD: amountUSD,
+            amountRF: amountRF,
+            status: "Pending",
+            type: "Welcome Bonus"
+        };
+
+        // Save to global logs for admin_approval.html
+        let adminLogs = JSON.parse(localStorage.getItem("admin_pending_withdrawals")) || [];
+        adminLogs.push(request);
+        localStorage.setItem("admin_pending_withdrawals", JSON.stringify(adminLogs));
+
+        // Deduct from user's welcome bonus locally (optional, or wait for admin approval)
+        // localStorage.setItem(prefix + "welcomeBonus", welcomeBonus - amountRF);
+
+        alert(`Success! Your request for RF ${amountRF.toLocaleString()} has been sent to Admin for approval.`);
+        window.location.href = "menu.html";
+    }
+</script>
+
+</body>
+</html>

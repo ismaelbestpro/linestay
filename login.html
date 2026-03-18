@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Stay - Login</title>
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; margin: 0; background: #f4f5f7; }
+        .main { display: flex; height: 100vh; }
+
+        /* LEFT SIDE */
+        .left { flex: 1.2; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fcfcfd; border-right: 1px solid #eee; }
+        .logo { position: absolute; top: 30px; left: 40px; font-size: 24px; font-weight: bold; color: #1c2b4b; }
+        .left img { width: 400px; opacity: 0.9; }
+
+        /* RIGHT SIDE */
+        .right { flex: 0.8; display: flex; justify-content: center; align-items: center; background: white; }
+        .container { padding: 40px; width: 100%; max-width: 400px; }
+        
+        h2 { margin-bottom: 10px; color: #444; font-size: 24px; }
+        .subtitle { font-size: 14px; color: #888; margin-bottom: 30px; }
+        
+        label { display: block; font-size: 13px; color: #6e6b7b; margin-bottom: 5px; }
+        input[type="text"], input[type="password"], input[type="email"] { 
+            width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 6px; 
+            border: 1px solid #d8d6de; box-sizing: border-box; transition: 0.2s;
+        }
+        input:focus { outline: none; border-color: #7367f0; }
+
+        .options { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 25px; }
+        .options a { color: #7367f0; text-decoration: none; }
+
+        button { 
+            width: 100%; padding: 12px; background: #7367f0; border: none; color: white; 
+            font-size: 15px; border-radius: 6px; cursor: pointer; font-weight: 600;
+            box-shadow: 0 8px 25px -8px #7367f0;
+        }
+        button:hover { opacity: 0.9; }
+
+        .register { text-align: center; margin-top: 25px; font-size: 14px; color: #6e6b7b; }
+        .register a { color: #7367f0; text-decoration: none; font-weight: 600; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 350px; }
+    </style>
+</head>
+
+<body>
+
+<div class="logo">💰 LINE<span style="color:#7367f0">STAY</span></div>
+
+<div class="main">
+    <div class="left">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Illustration">
+        <p style="margin-top:20px; color:#7367f0; font-weight:600;">Secure & Fast Earning Platform</p>
+    </div>
+
+    <div class="right">
+        <div class="container">
+            <h2>Welcome Back! 👋</h2>
+            <p class="subtitle">Please sign-in to your account to continue</p>
+
+            <form id="loginForm">
+                <label>Username or Email</label>
+                <input type="text" id="loginInput" placeholder="Enter your details" required>
+
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="············" required>
+
+                <div class="options">
+                    <label style="display:flex; align-items:center; gap:5px;">
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="#" id="forgotPassword">Forgot Password?</a>
+                </div>
+
+                <button type="submit">Sign in</button>
+            </form>
+
+            <div class="register">
+                New on our platform? <a href="register.html">Create an account</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="resetModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0;">Reset Password</h3>
+        <p style="font-size: 12px; color: #666; margin-bottom:20px;">Enter your email to update your password.</p>
+        
+        <label>Registered Email</label>
+        <input type="email" id="resetEmail" placeholder="email@example.com">
+        
+        <label>New Password</label>
+        <input type="password" id="newPassword" placeholder="Minimum 6 characters">
+        
+        <button onclick="handlePasswordReset()" style="background: #28a745; box-shadow: none;">Update Password</button>
+        <button onclick="closeModal()" style="background: #ccc; box-shadow: none; margin-top:10px; color:#333;">Cancel</button>
+    </div>
+</div>
+
+<script>
+// --- INITIALIZE DEFAULT ADMIN ---
+let users = JSON.parse(localStorage.getItem("users")) || [];
+if(!users.some(u => u.type === "admin")){
+    users.push({
+        username: "linestay",
+        email: "kezateta2000@gmail.com",
+        country: "Rwanda",
+        password: "Mukarugira@123", // Match your preferred admin password
+        active: true,
+        type: "admin"
+    });
+    localStorage.setItem("users", JSON.stringify(users));
+}
+
+// --- LOGIN LOGIC ---
+document.getElementById("loginForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    
+    let loginInput = document.getElementById("loginInput").value.trim().toLowerCase();
+    let password = document.getElementById("loginPassword").value;
+    
+    let allUsers = JSON.parse(localStorage.getItem("users")) || [];
+    
+    // Find user by username OR email
+    let user = allUsers.find(u => 
+        (u.username.toLowerCase() === loginInput || u.email.toLowerCase() === loginInput) && 
+        u.password === password
+    );
+    
+    if(!user){
+        alert("Invalid username/email or password!");
+        return;
+    }
+
+    // Save current session
+    localStorage.setItem("currentUser", JSON.stringify(user));
+
+    // --- REDIRECTION LOGIC ---
+    if(user.type === "admin") {
+        // Redirect Admin to the approval task page
+        window.location.href = "admin_approval.html";
+    } else {
+        // Redirect regular users
+        if(!user.active) {
+            // If account isn't approved/paid yet
+            window.location.href = "activation.html";
+        } else {
+            // If account is active
+            window.location.href = "menu.html";
+        }
+    }
+});
+
+// --- MODAL LOGIC ---
+const modal = document.getElementById("resetModal");
+document.getElementById("forgotPassword").addEventListener("click", (e) => {
+    e.preventDefault();
+    modal.style.display = "flex";
+});
+
+function closeModal() { modal.style.display = "none"; }
+
+function handlePasswordReset() {
+    let emailInput = document.getElementById("resetEmail").value.trim().toLowerCase();
+    let newPass = document.getElementById("newPassword").value;
+    
+    if(!emailInput || newPass.length < 4) {
+        alert("Please provide valid details.");
+        return;
+    }
+
+    let usersList = JSON.parse(localStorage.getItem("users")) || [];
+    let userIdx = usersList.findIndex(u => u.email.toLowerCase() === emailInput);
+
+    if (userIdx === -1) {
+        alert("Email not found.");
+    } else {
+        usersList[userIdx].password = newPass;
+        localStorage.setItem("users", JSON.stringify(usersList));
+        alert("Password updated successfully!");
+        closeModal();
+    }
+}
+</script>
+
+</body>
+</html>

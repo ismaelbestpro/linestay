@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Stay - Watch Task</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-bg: #1e222d;
+            --sidebar-width: 280px;
+            --active-item-bg: rgba(255, 255, 255, 0.08);
+            --text-gray: #94a3b8;
+            --logout-red: #f84f4f;
+            --accent-purple: #7367f0;
+            --accent-yellow: #f6c23e;
+            --main-bg: #f4f5f7;
+            --primary-blue: #3b82f6;
+        }
+
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--main-bg); display: flex; overflow-x: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { width: var(--sidebar-width); height: 100vh; background-color: var(--sidebar-bg); position: fixed; left: 0; top: 0; display: flex; flex-direction: column; color: white; z-index: 1000; }
+        .logo-section { padding: 40px 24px; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; }
+        .menu-list { flex: 1; overflow-y: auto; }
+        .menu-item-container { display: flex; justify-content: space-between; align-items: center; padding: 16px 28px; color: var(--text-gray); text-decoration: none; font-size: 15px; transition: 0.2s; border-left: 4px solid transparent; }
+        .menu-item-container:hover, .menu-item-container.active { color: white; background-color: var(--active-item-bg); }
+        .menu-item-container.active { border-left-color: var(--accent-purple); font-weight: 600; }
+
+        /* SIDEBAR PILLS */
+        .sidebar-bal { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        .bal-purple { background: rgba(115, 103, 240, 0.2); color: #a29bfe; }
+        .bal-yellow { background: rgba(246, 194, 62, 0.2); color: var(--accent-yellow); }
+
+        .logout-container { padding: 20px; }
+        .logout-btn { display: block; width: 100%; background-color: var(--logout-red); color: white; text-align: center; padding: 14px 0; border-radius: 12px; text-decoration: none; font-weight: 700; }
+
+        /* MAIN CONTENT */
+        .main-wrapper { margin-left: var(--sidebar-width); flex: 1; padding: 40px; min-height: 100vh; }
+        
+        .total-earning-card { background: #f6c23e; padding: 30px; border-radius: 16px; color: white; box-shadow: 0 10px 20px rgba(246, 194, 62, 0.2); margin-bottom: 30px; }
+        .total-earning-card h2 { margin: 0; font-size: 14px; text-transform: uppercase; opacity: 0.9; }
+        .total-earning-amount { font-size: 36px; font-weight: 800; margin-top: 5px; }
+
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        .photo-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: center; }
+        .photo-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
+        
+        .interaction-box { margin-bottom: 20px; }
+        .interaction-box button { background: none; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #475569; transition: 0.2s; }
+        .interaction-box input { width: 90%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: 12px; background: #f8fafc; }
+
+        .btn-claim { width: 100%; padding: 14px; background: var(--primary-blue); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 15px; }
+        .btn-claim:hover { background: #2563eb; transform: translateY(-2px); }
+        .btn-claim:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-section">💰 LINE STAY</div>
+    <nav class="menu-list">
+        <a href="menu.html" class="menu-item-container"><span>Dash Board</span></a>
+        <div class="menu-item-container">
+            <span>Total Earnings</span>
+            <span class="sidebar-bal bal-yellow" id="sideTotalEarn">RF 0</span>
+        </div>
+        <a href="withdraw_task.html" class="menu-item-container">
+            <span>Withdraw Task Earn</span>
+            <span class="sidebar-bal bal-purple" id="sideTaskBal">RF 0</span>
+        </a>
+        <a href="withdraw_balance.html" class="menu-item-container">
+            <span>Withdraw Balance</span>
+            <span class="sidebar-bal bal-purple" id="sideMainBal">RF 0</span>
+        </a>
+        <a href="team_task.html" class="menu-item-container"><span>Team Task</span></a>
+        <a href="video_task.html" class="menu-item-container"><span>Video Task</span></a>
+        <a href="spin_task.html" class="menu-item-container"><span>Spin Task</span></a>
+        <a href="watch_task.html" class="menu-item-container active"><span>Watch Task</span></a>
+        <a href="profile.html" class="menu-item-container"><span>User Profile</span></a>
+    </nav>
+    <div class="logout-container">
+        <a href="logout.html" class="logout-btn">Logout Account</a>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <div class="total-earning-card">
+        <h2>Total Earning Balance</h2>
+        <div class="total-earning-amount" id="taskEarnings">RF 0</div>
+    </div>
+
+    <h3 style="margin-bottom: 25px; color: #1e293b;">Photo Engagement: Like, Comment & Earn</h3>
+
+    <div class="photo-grid">
+        <div class="photo-card">
+            <img src="oo.Webp" alt="Task Photo">
+            <div class="interaction-box">
+                <button onclick="this.innerText='❤️ Liked'; this.style.color='#ef4444';">Like Photo</button>
+                <input type="text" placeholder="Write a comment...">
+            </div>
+            <button class="btn-claim" onclick="claimPhotoReward(this)">Claim RF 3,600</button>
+        </div>
+
+        <div class="photo-card">
+            <img src="aa.png" alt="Task Photo">
+            <div class="interaction-box">
+                <button onclick="this.innerText='❤️ Liked'; this.style.color='#ef4444';">Like Photo</button>
+                <input type="text" placeholder="Write a comment...">
+            </div>
+            <button class="btn-claim" onclick="claimPhotoReward(this)">Claim RF 3,600</button>
+        </div>
+    </div>
+</div>
+<script>
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (!user) { window.location.href = "login.html"; }
+    
+    const prefix = user.username + "_";
+    const rewardAmountRF = 3600; 
+    const MAX_DAILY = 5;
+
+    window.onload = function() {
+        checkDailyReset();
+        updateUI();
+        renderTaskStatus();
+    };
+
+    // Resets the daily count if the date has changed
+    function checkDailyReset() {
+        const today = new Date().toLocaleDateString();
+        const lastDate = localStorage.getItem(prefix + "watch_last_date");
+        
+        if (lastDate !== today) {
+            localStorage.setItem(prefix + "watch_daily_count", 0);
+            localStorage.setItem(prefix + "watch_last_date", today);
+            // Clear the list of specific photos/videos claimed today
+            localStorage.setItem(prefix + "claimed_tasks_today", JSON.stringify([]));
+        }
+    }
+
+    function updateUI() {
+        // We pull 'taskEarnings' which is the shared key with menu.html
+        const taskEarned = parseInt(localStorage.getItem(prefix + "taskEarnings")) || 0;
+        const affEarned = parseInt(localStorage.getItem(prefix + "affiliateEarnings")) || 0;
+        const withdrawn = parseInt(localStorage.getItem(prefix + "withdrawn")) || 0;
+        
+        const totalGross = taskEarned + affEarned;
+        const availableBal = affEarned - withdrawn;
+
+        // Update UI Elements
+        document.getElementById("taskEarnings").innerText = "RF " + totalGross.toLocaleString();
+        document.getElementById("sideTotalEarn").innerText = "RF " + totalGross.toLocaleString();
+        document.getElementById("sideTaskBal").innerText = "RF " + taskEarned.toLocaleString();
+        document.getElementById("sideMainBal").innerText = "RF " + availableBal.toLocaleString();
+    }
+
+    function renderTaskStatus() {
+        const dailyCount = parseInt(localStorage.getItem(prefix + "watch_daily_count")) || 0;
+        const buttons = document.querySelectorAll('.btn-claim');
+        
+        if (dailyCount >= MAX_DAILY) {
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerText = "Daily Limit Reached";
+                btn.style.background = "#94a3b8";
+            });
+        }
+    }
+
+    function claimPhotoReward(button) {
+        let dailyCount = parseInt(localStorage.getItem(prefix + "watch_daily_count")) || 0;
+
+        if (dailyCount >= MAX_DAILY) {
+            alert("Limit reached! You can only watch 5 videos per day.");
+            return;
+        }
+
+        // 1. Update Task Earnings (This is the key menu.html reads)
+        let currentTaskTotal = parseInt(localStorage.getItem(prefix + "taskEarnings")) || 0;
+        localStorage.setItem(prefix + "taskEarnings", currentTaskTotal + rewardAmountRF);
+
+        // 2. Increment Daily Counter
+        localStorage.setItem(prefix + "watch_daily_count", dailyCount + 1);
+
+        // 3. Update UI
+        updateUI();
+        button.disabled = true;
+        button.innerText = "Claimed!";
+        button.style.background = "#28c76f"; // Green for success
+        
+        alert(`Success! RF ${rewardAmountRF.toLocaleString()} added. Daily progress: ${dailyCount + 1}/${MAX_DAILY}`);
+        
+        // Check if we just hit the limit
+        renderTaskStatus();
+    }
+</script>
+
+</body>
+</html>

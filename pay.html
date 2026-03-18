@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>line stay- Payment</title>
+    <style>
+        :root {
+            --primary-blue: #7367f0;
+            --link-blue: #5e50ee;
+            --teal-btn: #00bcd4;
+            --orange-btn: #ff9f43;
+            --bg-light: #f8f9fb;
+            --text-dark: #444;
+            --instruction-gray: #6e6b7b;
+        }
+
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Left side decorative area */
+        .decoration-side {
+            flex: 1.2;
+            padding: 40px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1c2b4b;
+            margin-bottom: 20px;
+        }
+
+        /* Right side form card */
+        .form-side {
+            flex: 0.8;
+            display: flex;
+            justify-content: center;
+        }
+
+        .payment-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        /* Payment Instructions Styling */
+        .pay-link {
+            color: var(--link-blue);
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            font-size: 13px;
+            color: var(--instruction-gray);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .instructions b {
+            color: #333;
+        }
+
+        /* Input Styling */
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--instruction-gray);
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d8d6de;
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-blue);
+        }
+
+        /* Images and Buttons */
+        .flex-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .msg-preview {
+            background: #111;
+            color: #fff;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: monospace;
+            max-width: 180px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-teal { background-color: var(--teal-btn); }
+        .btn-orange { background-color: var(--orange-btn); }
+        .btn-purple { background-color: var(--primary-blue); }
+
+        .footer-text {
+            font-size: 11px;
+            color: #999;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+
+        .footer-text a { color: var(--link-blue); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .decoration-side { display: none; }
+            .page-container { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    <div class="decoration-side">
+        <div class="logo">💰 LINE STAY</div>
+        <div style="text-align:center; padding-top: 50px;">
+             <div style="font-size: 80px;">🛋️👩‍💻</div>
+        </div>
+    </div>
+
+    <div class="form-side">
+        <div class="payment-card">
+            <a href="#" class="pay-link">PAY WITH RWANDA MTN OR AIRTEL RWANDA</a>
+            
+            <div class="instructions">
+                <h2>AIRTEL RWANDA</h2>
+                Kanda <b>*182*1*1#</b> wemeze.<br>
+
+                Ushyiremo nimero <b>0725608060 : adeline NIYITANGA</b> wemeze.<br>
+                Ushyiremo umubare w'amafaranga (6,000) wemeze.<br>
+              
+                Ukomeze ushyiremo <b>PIN</b>.
+            </div>
+
+            <div class="input-group">
+                <label>Enter Transaction ID(TID)</label>
+                <input type="text" id="tid" placeholder="....">
+            </div>
+
+            <div class="flex-row">
+                <button class="btn btn-teal">CONFIRM</button>
+                <div class="msg-preview">
+                    *182*TxId:25802583810*S*...<br>
+                    ET Id: <span style="color:red; border:1px solid red;">UB1CK5JI2I</span>
+                </div>
+            </div>
+
+            <p class="footer-text">
+                If the transaction is not going through, send screenshot of the payment, Your Username and Phone number to Whatsapp at <a href="#">Click here for customer care</a>
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <button class="btn btn-orange" style="width: fit-content;">CLICK HERE to talk to customer care</button>
+
+                         <button class="btn btn-purple" style="width: fit-content;" onclick="window.location.href='login.html'">Login Now</button>            
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

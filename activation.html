@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>line star - Welcome</title>
+    <style>
+        :root {
+            --primary-teal: #00bcd4; /* The teal color from your screenshot */
+            --dark-blue: #1c2b4b;
+            --text-gray: #5e5873;
+            --bg-light: #f8f9fb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Illustration Side */
+        .illustration-container {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 40px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 50px;
+        }
+
+        /* Form Card Side */
+        .card-container {
+            flex: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin: 0 0 15px 0;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .instruction {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.1s, opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 188, 212, 0.2);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-teal);
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-teal);
+            color: white;
+            /* Based on screenshot, both buttons share the same teal base */
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Mobile Layout */
+        @media (max-width: 900px) {
+            .illustration-container { display: none; }
+            .main-wrapper { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="illustration-container">
+        <div class="logo">
+            <span style="font-size: 30px;">💰</span> LINE<span style="color:var(--primary-teal)">STAY</span>
+        </div>
+        <div style="margin: auto; opacity: 0.8; text-align: center;">
+             <div style="font-size: 100px;">👩‍💻</div>
+             <p style="color: #ccc;">[ Graphics Area ]</p>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="welcome-card">
+            <h2>Welcome!</h2>
+            <p class="instruction">Activate your account</p>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="window.location.href='pay.html'">ACTIVATE</button>
+                <button class="btn btn-secondary" onclick="window.location.href='pay.html'">Go To Dashboard</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Logic for Activation
+    document.getElementById("activateBtn").addEventListener("click", function() {
+        // You can add your specific activation logic here
+        alert("Account activation process started!");
+    });
+</script>
+
+</body>
+</html>
